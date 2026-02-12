@@ -1,0 +1,27 @@
+---
+title: "My Dashboard"
+format: dashboard
+---
+
+# Page 1
+
+## {.sidebar}
+Filter controls or explanatory text here.
+
+## Row {height=70%}
+```{r}
+#| title: "Chart 1"
+ggplot(mtcars, aes(wt, mpg)) + geom_point()
+```
+## Row {height=30%}
+```{r}
+#| title: "Chart 2"
+knitr::kable(head(mtcars))
+```
+
+# Page 2
+## Row {height=70%}
+```{r}
+#| title: "Chart 3"
+ggplot(mtcars, aes(wt, mpg)) + geom_point()
+```
