@@ -24,6 +24,7 @@ library(plotly)
 ## {.sidebar}
 Sidebar for page 1.
 
+## Boxplot
 
 ```{r}
 #| title: "Chart 1"
