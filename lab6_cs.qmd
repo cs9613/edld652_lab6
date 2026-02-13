@@ -1,27 +1,67 @@
 ---
 title: "My Dashboard"
-format: dashboard
+format: 
+  dashboard:
+    orientation: columns
+execute: 
+  freeze: auto
 ---
+
+```{r}
+library(palmerpenguins)
+data(penguins)
+library(viridis)
+library(RColorBrewer)
+library(colorspace)
+library(ggrepel)
+library(tidyverse)
+library(gghighlight)
+library(plotly)
+```
 
 # Page 1
 
 ## {.sidebar}
-Filter controls or explanatory text here.
+Sidebar for page 1.
 
-## Row {height=70%}
+
 ```{r}
 #| title: "Chart 1"
-ggplot(mtcars, aes(wt, mpg)) + geom_point()
-```
-## Row {height=30%}
-```{r}
-#| title: "Chart 2"
-knitr::kable(head(mtcars))
+
+ggplot(penguins, aes(x = island, y = body_mass_g, fill = island)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Body Mass by Island",
+       x = "Island",
+       y = "Body Mass (g)") + scale_fill_brewer(palette = "Dark2") + theme_classic()
+
 ```
 
 # Page 2
-## Row {height=70%}
+
+## Plots {.tabset}
+
+```{r}
+#| title: "Chart 2"
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g, color = bill_length_mm)) +
+  geom_point(size = 2) + scale_color_viridis_c(option = "inferno") + theme_classic()
+```
+
+
 ```{r}
 #| title: "Chart 3"
-ggplot(mtcars, aes(wt, mpg)) + geom_point()
+ggplot(penguins, aes(x = flipper_length_mm, y = bill_length_mm, color = species)) +
+  geom_point() +
+  gghighlight(species == "Gentoo") + theme_minimal() 
 ```
+
+```{r}
+#| title: "Chart 4"
+p <- ggplot(mpg, aes(displ, cty)) +
+  geom_point() +
+  geom_smooth() +
+  labs(x = "Displacement", y = "City MPG") +
+  theme_minimal(14)
+
+ggplotly(p)
+```
+
