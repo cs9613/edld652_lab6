@@ -1,5 +1,5 @@
 ---
-title: "My Dashboard"
+title: "EDLD Final Project"
 format: 
   dashboard:
     orientation: columns
@@ -8,8 +8,6 @@ execute:
 ---
 
 ```{r}
-library(palmerpenguins)
-data(penguins)
 library(viridis)
 library(RColorBrewer)
 library(colorspace)
@@ -17,52 +15,108 @@ library(ggrepel)
 library(tidyverse)
 library(gghighlight)
 library(plotly)
+
+df <- readRDS("ms1_cs.rds")
+
 ```
+At least four finalized data displays, with each accompanied by a strong narrative/story, as well as the history of how the visualization changed over time.
+You must show iterations of your data displays, highlighting how they evolved over time and why you made the specific changes you did. Dashboards similarly have built in mechanisms to help show the history of plot.
+
+The final project is required to be housed on GitHub and be fully reproducible. It will be graded on the following three criteria:
+
+At least four different visualizations (20 points; 5 points each)
+Design choices (nothing violating the principles discussed in class)
+Plot appropriate for given audience
+Evolution of the plot is clear
+
 
 # Page 1
 
 ## {.sidebar}
 Sidebar for page 1.
 
-## Boxplot
+## Plots {.tabset}
 
 ```{r}
-#| title: "Chart 1"
+#| title: "Data Viz 1"
 
-ggplot(penguins, aes(x = island, y = body_mass_g, fill = island)) +
-  geom_boxplot() +
-  labs(title = "Boxplot of Body Mass by Island",
-       x = "Island",
-       y = "Body Mass (g)") + scale_fill_brewer(palette = "Dark2") + theme_classic()
+ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
+  geom_point(size = 2) + theme_classic()
 
 ```
 
+
+```{r}
+#| title: "Data Viz 1.1"
+
+ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
+  geom_point(size = 2) + theme_classic()
+
+```
+
+
 # Page 2
+
+## {.sidebar}
+Sidebar for page 2.
 
 ## Plots {.tabset}
 
 ```{r}
-#| title: "Chart 2"
-ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g, color = bill_length_mm)) +
-  geom_point(size = 2) + scale_color_viridis_c(option = "inferno") + theme_classic()
+#| title: "Data Viz 2"
+ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
+  geom_point(size = 2) + theme_classic()
+
+```
+
+```{r}
+#| title: "Data Viz 2.1"
+ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
+  geom_point(size = 2) + theme_classic()
+
+```
+
+
+# Page 3
+
+## {.sidebar}
+Sidebar for page 3.
+
+## Plots {.tabset}
+
+```{r}
+#| title: "Data Viz 3"
+ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
+  geom_point(size = 2) + theme_classic()
 ```
 
 
 ```{r}
-#| title: "Chart 3"
-ggplot(penguins, aes(x = flipper_length_mm, y = bill_length_mm, color = species)) +
-  geom_point() +
-  gghighlight(species == "Gentoo") + theme_minimal() 
+#| title: "Data Viz 3.1"
+ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
+  geom_point(size = 2) + theme_classic()
 ```
 
+
+# Page 4
+
+## {.sidebar}
+Sidebar for page 4.
+
+## Plots {.tabset}
+
 ```{r}
-#| title: "Chart 4"
-p <- ggplot(mpg, aes(displ, cty)) +
-  geom_point() +
-  geom_smooth() +
-  labs(x = "Displacement", y = "City MPG") +
-  theme_minimal(14)
+#| title: "Data Viz 4"
+p <- ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
+  geom_point(size = 2) + theme_classic()
+
+```
+
+
+```{r}
+#| title: "Data Viz 4.1"
+p <- ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
+  geom_point(size = 2) + theme_classic()
 
 ggplotly(p)
 ```
-
