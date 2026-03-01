@@ -1,7 +1,8 @@
 ---
-title: "EDLD Final Project"
+title: "EDLD 652: Final Project - Chen Su"
 format: 
   dashboard:
+    theme: vapor
     orientation: columns
 output-dir: docs
 ---
@@ -18,21 +19,19 @@ library(plotly)
 df <- readRDS("ms1_cs.rds")
 
 ```
-At least four finalized data displays, with each accompanied by a strong narrative/story, as well as the history of how the visualization changed over time.
-You must show iterations of your data displays, highlighting how they evolved over time and why you made the specific changes you did. Dashboards similarly have built in mechanisms to help show the history of plot.
 
-The final project is required to be housed on GitHub and be fully reproducible. It will be graded on the following three criteria:
-
-At least four different visualizations (20 points; 5 points each)
-Design choices (nothing violating the principles discussed in class)
-Plot appropriate for given audience
-Evolution of the plot is clear
+Final Project EDLD
 
 
 # Page 1
 
 ## {.sidebar}
-Sidebar for page 1.
+Data Source: Health Behaviors of Sexually and Gender Diverse Individuals (PIs: Dr. Austin Folger and Dr. Nichole Kelly)
+
+Project Description: 
+This cross-sectional study collected data on 1300 racially and ethnically diverse adults. The goal of the study is to identify whether adult Sexual Gender Minority (SGM) subgroups differ in terms of their mental and physical health behaviors and risk, as well as factors that affect the health of those with diverse sexual and gender identities. 
+
+The data used for all the visualizations here focus on a subset of the main study sample, and only included minoritized racial and ethnic individuals (n = 912). 
 
 ## Plots {.tabset}
 
