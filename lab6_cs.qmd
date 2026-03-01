@@ -3,8 +3,7 @@ title: "EDLD Final Project"
 format: 
   dashboard:
     orientation: columns
-execute: 
-  freeze: auto
+output-dir: docs
 ---
 
 ```{r}
