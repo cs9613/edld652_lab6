@@ -15,8 +15,33 @@ library(ggrepel)
 library(tidyverse)
 library(gghighlight)
 library(plotly)
+library(forcats)
 
-df <- readRDS("ms1_cs.rds")
+df <- readRDS("strata1.rds")
+
+df <- df |>
+  select(1:36) |>
+  filter(!is.na(gender_coded)) |>
+  filter(!is.na(income))
+
+df <- df |>
+  mutate(race_strata = factor(st_race,
+                      levels = c(1, 2, 3, 4),
+                      labels = c("Non-Hispanic White",
+                                 "Non-Hispanic POC",
+                                 "Hispanic White",
+                                 "Hispanic POC"))) |> 
+  relocate(race_strata, .before = gender_coded)
+
+#data-viz 4
+
+df <- df |>
+  mutate(strata = st_race + st_gender + st_income) |>
+  relocate(strata, .after = subID)
+
+df$strata <- as.factor(df$strata)
+
+strata <- as.data.frame(table(df$strata))
 
 ```
 
@@ -29,26 +54,46 @@ Final Project EDLD
 Data Source: Health Behaviors of Sexually and Gender Diverse Individuals (PIs: Dr. Austin Folger and Dr. Nichole Kelly)
 
 Project Description: 
-This cross-sectional study collected data on 1300 racially and ethnically diverse adults. The goal of the study is to identify whether adult Sexual Gender Minority (SGM) subgroups differ in terms of their mental and physical health behaviors and risk, as well as factors that affect the health of those with diverse sexual and gender identities. 
+This cross-sectional study collected data on 1329 racially and ethnically diverse adults. a large proportion of the sample also identifies as Sexual Gender Minority (SGM). The goal of the original study is to identify whether adult SGM subgroups differ in terms of their mental and physical health behaviors and risk, as well as factors that affect the health of those with diverse sexual and gender identities. 
 
-The data used for all the visualizations here focus on a subset of the main study sample, and only included minoritized racial and ethnic individuals (n = 912). 
+Here, we use several data visualizations to explore the data before constructing strata for analyses using Multilevel Analysis of Individual Heterogeneity and Discriminatory Accuracy (MAIHDA).
+
 
 ## Plots {.tabset}
 
 ```{r}
-#| title: "Data Viz 1"
+#| title: "Data Viz 1 (Ver. 1)"
 
-ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
-  geom_point(size = 2) + theme_classic()
+ggplot(df, aes(x = newsa_cri)) +
+  geom_bar() + theme_classic() + 
+  facet_wrap(~race_strata) +
+  coord_flip() +
+  labs(x = "Perceived Neighborhood Safety Score (1-4)", y = "N", title = "Distribution of Perceived Neighborhood Safety from Crime by Racial and Ethnic Groups", caption = "Note: Higher Score Indicating Safer Neighborhood")
 
 ```
 
 
 ```{r}
-#| title: "Data Viz 1.1"
+#| title: "Data Viz 1 (Ver. 2)"
 
-ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
-  geom_point(size = 2) + theme_classic()
+ggplot(df, aes(x = newsa_cri)) +
+  geom_bar() + theme_classic() + 
+  facet_wrap(~race_strata) +
+  coord_flip() +
+  gghighlight(newsa_cri == 4 | newsa_cri == 1) +
+  labs(x = "Perceived Neighborhood Safety Score (1-4)", y = "N", title = "Distribution of Perceived Neighborhood Safety from Crime by Racial and Ethnic Groups", caption = "Note: Higher Score Indicating Safer Neighborhood")
+
+```
+
+
+```{r}
+#| title: "Data Viz 1 (Ver. 3)"
+
+ggplot(df, aes(x = race_strata, y = newsa_cri)) +
+  geom_boxplot(alpha = 0.7) + 
+  theme_classic() +
+  coord_flip() +
+  labs(x = "Racial and Ethnic Groups", y = "Perceived Neighborhood Safety Score (1-4)", title = "Distribution of Perceived Neighborhood Safety from Crime by Racial and Ethnic Group", caption = "Note: Higher Score Indicating Safer Neighborhood")
 
 ```
 
@@ -56,21 +101,42 @@ ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
 # Page 2
 
 ## {.sidebar}
-Sidebar for page 2.
+
+How does Perceived Neighborhood Safety vary for individuals with different gender identities? 
+
+How does this vary by gender identities and race/ethnicity?
 
 ## Plots {.tabset}
 
 ```{r}
-#| title: "Data Viz 2"
-ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
-  geom_point(size = 2) + theme_classic()
+#| title: "Data Viz 2 (Ver. 1)"
+
+ggplot(df, aes(x = gender_coded, y = newsa_cri)) +
+  geom_boxplot() + theme_classic() +
+  labs(x = "Gender Identity", y = "Perceived Neighborhood Safety Score (1-4)", title = "Distribution of Perceived Neighborhood Safety from Crime by Gender Identity", caption = "Note: Higher Score Indicating Safer Neighborhood")
 
 ```
 
 ```{r}
-#| title: "Data Viz 2.1"
-ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
-  geom_point(size = 2) + theme_classic()
+#| title: "Data Viz 2 (Ver. 2)"
+
+ggplot(df, aes(x = gender_coded, y = newsa_cri)) +
+  geom_boxplot() + theme_classic() + 
+  stat_summary(fun=mean, geom="point", shape=20, size=4, color="red", position=position_dodge(0.75)) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2, color="red", position=position_dodge(0.75)) +
+  labs(x = "Gender Identity", y = "Perceived Neighborhood Safety Score (1-4)", title = "Distribution of Perceived Neighborhood Safety from Crime by Gender Identity", caption = "Note: Higher Score Indicating Safer Neighborhood;
+       mean/se were denoted with red circle and red lines.")
+
+```
+
+
+```{r}
+#| title: "Data Viz 2 (Ver. 3)"
+
+ggplot(df, aes(x = gender_coded, y = newsa_cri)) +
+  geom_boxplot() + theme_classic() +
+  facet_wrap(~race_strata) +
+  labs(x = "Gender Identity", y = "Perceived Neighborhood Safety Score (1-4)", title = "Distribution of Perceived Neighborhood Safety from Crime by Gender Identity and Race/Ethnicity", caption = "Note: Higher Score Indicating Safer Neighborhood")
 
 ```
 
@@ -78,43 +144,79 @@ ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
 # Page 3
 
 ## {.sidebar}
-Sidebar for page 3.
+How does Perceived Neighborhood Safety vary for individuals with different income? 
+
+How does this vary by income status and race/ethnicity?
 
 ## Plots {.tabset}
 
 ```{r}
-#| title: "Data Viz 3"
-ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
-  geom_point(size = 2) + theme_classic()
+#| title: "Data Viz 3 (Ver. 1)"
+
+ggplot(df, aes(x = income, y = newsa_cri)) +
+  geom_boxplot() + theme_classic() +
+  facet_wrap(~race_strata) +
+  labs(x = "Income", y = "Perceived Neighborhood Safety Score (1-4)", title = "Distribution of Perceived Neighborhood Safety from Crime by Income Status and Race/Ethnicity", caption = "Note: Higher Score Indicating Safer Neighborhood")
+
 ```
 
 
 ```{r}
-#| title: "Data Viz 3.1"
-ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
-  geom_point(size = 2) + theme_classic()
+#| title: "Data Viz 3 (Ver. 2)"
+
+ggplot(df, aes(x = income, y = gender_coded, 
+               label = round(newsa_cri, digits = 0))) +
+  geom_tile(aes(fill = newsa_cri)) + 
+  facet_wrap(~race_strata) + 
+  scale_fill_distiller(palette = "RdBu", direction = -1) +
+  labs(x = "Income", y = "Gender Identity", fill = "Perceived Neighborhood Safety Score (1-4)", title = "Heatmap of Perceived Neighborhood Safety from Crime by Income Status, Gender Identity and Race/Ethnicity", caption = "Note: Higher Score Indicating Safer Neighborhood") + theme_classic()
+
 ```
 
 
 # Page 4
 
 ## {.sidebar}
-Sidebar for page 4.
+
+How does Perceived Neighborhood Safety vary across strata of individuals with intersectional identities (race/ethnicity, gender, income)?
 
 ## Plots {.tabset}
 
 ```{r}
-#| title: "Data Viz 4"
-p <- ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
-  geom_point(size = 2) + theme_classic()
+#| title: "Data Viz 4 (Ver. 1)"
+
+ggplot(df, aes(x = strata, y = newsa_cri)) +
+  geom_boxplot() + theme_classic() +
+  coord_flip() +
+  labs(x = "Strata IDs", y = "Perceived Neighborhood Safety Score (1-4)", title = "Distribution of Perceived Neighborhood Safety from Crime by Intersectional Strata", caption = "Note: Higher Score Indicating Safer Neighborhood; strata were constructed with race/ethnicity, gender identities and income levels.")
+
 
 ```
 
 
 ```{r}
-#| title: "Data Viz 4.1"
-p <- ggplot(df, aes(x = age, y = bmi_cleaned, color = gender_coded)) +
-  geom_point(size = 2) + theme_classic()
+#| title: "Data Viz 4 (Ver. 2)"
 
-ggplotly(p)
+ggplot(df, aes(x = newsa_cri, 
+               y = fct_reorder(strata, newsa_cri))) +
+  geom_boxplot() + theme_classic() +
+  labs(x = "Perceived Neighborhood Safety Score (1-4)", y = "Strata IDs", title = "Distribution of Perceived Neighborhood Safety from Crime by Intersectional Strata", caption = "Note: Higher Score Indicating Safer Neighborhood; strata were constructed with race/ethnicity, gender identities and income levels.")
+
+
 ```
+
+
+```{r}
+#| title: "Data Viz 4 (Ver. 3)"
+
+ggplot(df, aes(x = newsa_cri, 
+               y = fct_reorder(strata, newsa_cri))) +
+  geom_boxplot() + 
+  stat_summary(fun=mean, geom="point", shape=20, size=4, color="red", position=position_dodge(0.75)) +
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.2, color="red", position=position_dodge(0.75)) +
+  theme_classic() +
+  labs(x = "Perceived Neighborhood Safety Score (1-4)", y = "Strata IDs", title = "Distribution of Perceived Neighborhood Safety from Crime by Intersectional Strata", caption = "Note: Higher Score Indicating Safer Neighborhood; strata were constructed with race/ethnicity, gender identities and income levels.")
+
+
+```
+
