@@ -45,11 +45,11 @@ strata <- as.data.frame(table(df$strata))
 
 ```
 
-Intersectional Identities and Perceived Neighborhood Safety
+Exploring the Variations of Perceived Neighborhood Safety across Intersectional Identities.
 
 
 
-# Page 1
+# Exploring Variations across Race/Ethnicity 
 
 ## {.sidebar}
 1. How does Perceived Neighborhood Safety vary for individuals with different race/ethnicity? 
@@ -102,7 +102,7 @@ ggplot(df, aes(x = race_strata, y = newsa_cri)) +
 ```
 
 
-# Page 2
+# Exploring Variations across Gender Identities 
 
 ## {.sidebar}
 
@@ -153,7 +153,7 @@ ggplot(df, aes(x = gender_coded, y = newsa_cri)) +
 ```
 
 
-# Page 3
+# Exploring Variations across Income Status
 
 ## {.sidebar}
 
@@ -195,7 +195,7 @@ ggplot(df, aes(x = income, y = gender_coded,
 ```
 
 
-# Page 4
+# Variations across Constructed Strata
 
 ## {.sidebar}
 
