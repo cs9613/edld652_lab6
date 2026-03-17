@@ -4,6 +4,7 @@ format:
   dashboard:
     theme: vapor
     orientation: columns
+    expandable: true
 output-dir: docs
 ---
 
@@ -87,11 +88,9 @@ df$strata_name <- fct_recode(df$strata_name,
 
 ```
 
-Exploring the Variations of Perceived Neighborhood Safety across Intersectional Identities.
 
 
-
-# Exploring Variations across Race/Ethnicity 
+# Exploring Variations of Perceived Neighborhood Safety across Race/Ethnicity {height=10%}
 
 ## {.sidebar}
 1. How does Perceived Neighborhood Safety vary for individuals with different race/ethnicity? 
@@ -103,7 +102,8 @@ Here, we use several data visualizations to explore the data before constructing
 
 Data Source: Health Behaviors of Sexually and Gender Diverse Individuals (PIs: Dr. Austin Folger and Dr. Nichole Kelly).
 
-## Plots
+
+## Plots {.tabset}
 
 ```{r}
 #| title: "Data Viz 1 - Final"
@@ -122,8 +122,6 @@ ggplot(df, aes(x = fct_reorder(race_strata, newsa_cri, median, na.rm = TRUE), y 
 
 ```
 
-
-## Plots {.tabset}
 
 ```{r}
 #| title: "Data Viz 1 (Ver. 1)"
@@ -163,7 +161,7 @@ ggplot(df, aes(x = race_strata, y = newsa_cri)) +
 ```
 
 
-# Exploring Variations across Gender Identities 
+# Exploring Variations of Perceived Neighborhood Safety across Gender Identities 
 
 ## {.sidebar}
 
@@ -177,7 +175,7 @@ Here, we use several data visualizations to explore the data before constructing
 Data Source: Health Behaviors of Sexually and Gender Diverse Individuals (PIs: Dr. Austin Folger and Dr. Nichole Kelly).
 
 
-## Plots
+## Plots {.tabset}
 
 ```{r}
 #| title: "Data Viz 2 - Final"
@@ -199,8 +197,6 @@ ggplot(df, aes(x = gender_coded, y = newsa_cri)) +
 
 ```
 
-
-## Plots {.tabset}
 
 ```{r}
 #| title: "Data Viz 2 (Ver. 1)"
@@ -238,7 +234,7 @@ ggplot(df, aes(x = gender_coded, y = newsa_cri)) +
 ```
 
 
-# Exploring Variations across Income Status
+# Exploring Variations of Perceived Neighborhood Safety across Income Status
 
 ## {.sidebar}
 
@@ -252,7 +248,7 @@ Here, we use several data visualizations to explore the data before constructing
 Data Source: Health Behaviors of Sexually and Gender Diverse Individuals (PIs: Dr. Austin Folger and Dr. Nichole Kelly).
 
 
-## Plots
+## Plots {.tabset}
 
 ```{r}
 #| title: "Data Viz 3 - Final"
@@ -270,8 +266,6 @@ ggplot(df, aes(x = income, y = gender_coded,
 
 ```
 
-
-## Plots {.tabset}
 
 ```{r}
 #| title: "Data Viz 3 (Ver. 1)"
@@ -300,7 +294,7 @@ ggplot(df, aes(x = income, y = gender_coded,
 ```
 
 
-# Variations across Constructed Strata
+# Variations of Perceived Neighborhood Safety across Constructed Strata
 
 ## {.sidebar}
 
@@ -314,10 +308,12 @@ Here, we use several data visualizations to explore the data before constructing
 Data Source: Health Behaviors of Sexually and Gender Diverse Individuals (PIs: Dr. Austin Folger and Dr. Nichole Kelly).
 
 
-## Plots
+## Plots {.tabset}
 
 ```{r}
 #| title: "Data Viz 4 - Final"
+#| fig-width: 14
+#| fig-height: 8
 
 df$st_race <- as.factor(df$st_race)
 df$st_race <- fct_recode(df$st_race, 
@@ -328,7 +324,7 @@ df$st_race <- fct_recode(df$st_race,
 df <- rename(df, "Race/Ethnicity" = st_race)
 
 ggplot(df, aes(x = newsa_cri, 
-               y = fct_reorder(strata_name, newsa_cri), 
+               y = fct_reorder(strata_name, newsa_cri, mean, na.rm = TRUE), 
                fill = `Race/Ethnicity`, shape = `Race/Ethnicity`)) +
   stat_summary(fun=mean, geom="point", size=4, position=position_dodge(0.75)) +
   stat_summary(fun.data=mean_se, geom="errorbar", width=0.2, position=position_dodge(0.75)) +
@@ -342,8 +338,6 @@ ggplot(df, aes(x = newsa_cri,
 
 ```
 
-
-## Plots {.tabset}
 
 ```{r}
 #| title: "Data Viz 4 (Ver. 1)"
